@@ -16,14 +16,18 @@ const userSchema = new Schema({
     validate: {},
   },
 
-  thoughts: {
-    type: [Schema.Types.ObjectId],
-    ref: "thought",
-  },
-  friends: {
-    type: [Schema.Types.ObjectId],
-    ref: "user",
-  },
+  thoughts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "thought",
+    },
+  ],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
 
   toJSON: {
     virtuals: true,
