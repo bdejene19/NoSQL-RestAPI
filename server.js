@@ -10,6 +10,6 @@ const PORT = 8000;
 
 db.once("open", () => {
   app.listen(PORT, () =>
-    console.log(`server running at http://localhost:${PORT}`)
+    console.log(`server running at http://127.0.0.1:${PORT}`)
   );
 });

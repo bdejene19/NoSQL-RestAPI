@@ -1,39 +1,41 @@
 const { Schema, model } = require("mongoose");
 
 // define document shape through mongoose ORM by defining Schema
-const userSchema = new Schema({
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    // validate email address
-    validate: {},
-  },
-
-  thoughts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "thought",
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
     },
-  ],
-  friends: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "user",
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      // validate email address
     },
-  ],
 
-  toJSON: {
-    virtuals: true,
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "thought",
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
   },
-  id: false,
-});
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    id: false,
+  }
+);
 
 const friendCount = userSchema.virtual("friendCount");
 
