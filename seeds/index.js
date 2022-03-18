@@ -11,12 +11,12 @@ connection.on("open", async () => {
   // clear existing entries
   await User.deleteMany({});
   await Thought.deleteMany({});
-  await Reaction.deleteMany({});
+  // await Reaction.deleteMany({});
 
   //   create new collections with seeded data
   await User.collection.insertMany(userData);
   await Thought.insertMany(thoughtData);
-  await Reaction.insertMany(reactionData);
+  // await Reaction.insertMany(reactionData);
 
   //   print created tables
   console.table(userData);
