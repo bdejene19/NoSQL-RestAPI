@@ -4,7 +4,7 @@ const {
 } = require("../../controllers/reactionController");
 const reaction = require("express").Router();
 
-reaction.route("/").get(createReaction);
+reaction.route("/").post(createReaction);
 reaction.route("/:id").delete(deleteReaction);
 
 module.exports = reaction;
