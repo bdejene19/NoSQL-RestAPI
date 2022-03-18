@@ -1,7 +1,7 @@
 const { User, Reaction } = require("../models/index");
 
-const createUser = (req, res) => {
-  const newUser = User.create({
+const createUser = async (req, res) => {
+  const newUser = await User.create({
     username: req.body.username,
     email: req.body.email,
     thoughts: [],
@@ -14,8 +14,30 @@ const createUser = (req, res) => {
   }
 };
 
-const updateUserById = (req, res) => {
-  const updatedUser = User.findOneAndUpdate(
+const getUserById = async (req, res) => {
+  const user = await User.findOne({
+    _id: req.params.id,
+  });
+
+  if (user) {
+    return res.status(200).json(user);
+  } else {
+    return res.status(404).json({ err: "user could not be found" });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  const users = await User.find({}).catch((err) => res.status(500).json(err));
+  if (!users) {
+    return res
+      .status(404)
+      .json({ err: "Users could not be found or do not exist" });
+  }
+  return res.status(200).json(users);
+};
+
+const updateUserById = async (req, res) => {
+  const updatedUser = await User.findOneAndUpdate(
     {
       _id: req.params.id,
     },
@@ -32,21 +54,8 @@ const updateUserById = (req, res) => {
     return res.status(404).json({ err: "user could not be updated" });
   }
 };
-
-const findUserById = (req, res) => {
-  const user = User.findOne({
-    _id: req.params.id,
-  });
-
-  if (user) {
-    return res.status(200).json(user);
-  } else {
-    return res.status(404).json({ err: "user could not be found" });
-  }
-};
-
-const deleteUser = (req, res) => {
-  const deletedUser = User.findOneAndDelete(
+const deleteUser = async (req, res) => {
+  const deletedUser = await User.findOneAndDelete(
     {
       _id: req.params.id,
     },
@@ -66,7 +75,9 @@ const deleteUser = (req, res) => {
 
 module.exports = {
   createUser,
+  getUserById,
+  getAllUsers,
   updateUserById,
-  findUserById,
+
   deleteUser,
 };
