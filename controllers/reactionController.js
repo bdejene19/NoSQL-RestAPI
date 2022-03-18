@@ -1,8 +1,8 @@
 const Reaction = require("../models/Reaction");
 
-const createReaction = (req, res) => {
+const createReaction = async (req, res) => {
   let newReaction = req.body;
-  let reactionAdded = Reaction.create(newReaction).catch((err) =>
+  let reactionAdded = await Reaction.create(newReaction).catch((err) =>
     console.log(err)
   );
 
@@ -13,20 +13,24 @@ const createReaction = (req, res) => {
   }
 };
 
-const deleteReaction = (req, res) => {
+const deleteReaction = async (req, res) => {
   let deleteReactionId = req.params.id;
   if (deleteReactionId) {
-    let deletedReaction = Reaction.findOneAndDelete(
+    let deletedReaction = await Reaction.findOneAndDelete(
       {
         _id: deleteReactionId,
       },
       {
         new: true,
       }
-    ).catch((err) => console.log(err));
+    ).catch((err) => res.status(500).json(err));
 
     if (deletedReaction) {
       res.status(200).json({ deletedReaction });
+    } else {
+      return res
+        .status(404)
+        .json({ err: "Delete request on reaction could not be made" });
     }
   }
 };

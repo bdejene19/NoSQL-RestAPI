@@ -1,9 +1,9 @@
 const { Thought } = require("../models/index");
-const createThought = (req, res) => {
+const createThought = async (req, res) => {
   let newThought = req.body;
 
   if (newThought) {
-    let successThought = Thought.create(newThought).catch((err) =>
+    let successThought = await Thought.create(newThought).catch((err) =>
       console.log(err)
     );
 
@@ -17,11 +17,11 @@ const createThought = (req, res) => {
   }
 };
 
-const findSpecificThought = (req, res) => {
+const findSpecificThought = async (req, res) => {
   let thoughtId = req.params.id;
 
   if (thoughtId) {
-    let thoughtFound = Thought.findById({ _id: thoughtId }).catch((err) =>
+    let thoughtFound = await Thought.findById({ _id: thoughtId }).catch((err) =>
       res.status(500).json(err)
     );
 
@@ -31,8 +31,10 @@ const findSpecificThought = (req, res) => {
   }
 };
 
-const getAllThoughts = (req, res) => {
-  let allThoughts = Thought.find({}).catch((err) => res.status(500).json(err));
+const getAllThoughts = async (req, res) => {
+  let allThoughts = await Thought.find({}).catch((err) =>
+    res.status(500).json(err)
+  );
   if (allThoughts) {
     res.status(200).json(allThoughts);
   } else {
