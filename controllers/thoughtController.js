@@ -1,4 +1,4 @@
-const { Thought } = require("../models/index");
+const { Thought, User } = require("../models/index");
 const createThought = async (req, res) => {
   let newThought = req.body;
 
@@ -8,7 +8,19 @@ const createThought = async (req, res) => {
     );
 
     if (successThought) {
-      res.status(201).json(successThought);
+      let userUpdated = User.findOneAndUpdate(
+        {
+          _id: newThought.userId,
+        },
+        {
+          $addToSet: { thoughts: successThought },
+        }
+      ).catch((err) => res.status(500).json(err));
+      if (userUpdated) {
+        return res.status(201).json(successThought);
+      } else {
+        return res.status(404).json({ err: "user could not be found" });
+      }
     } else {
       res
         .status(500)
@@ -44,6 +56,56 @@ const getAllThoughts = async (req, res) => {
   }
 };
 
+const updateThought = async (req, res) => {
+  let thoughtUpdates = req.body;
+
+  if (thoughtUpdates) {
+    let successUpdates = await Thought.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      thoughtUpdates
+    ).catch((err) => res.status(500).json(err));
+
+    if (!successUpdates) {
+      res
+        .status(404)
+        .json({ err: "Put request on thought could not be compeleted" });
+      return;
+    }
+    return res.status(200).json(thoughtUpdates);
+  }
+};
+
+const deleteThought = async (req, res) => {
+  let thoughtDeletion = req.params;
+
+  if (thoughtDeletion) {
+    let successDeletion = await Thought.findOneAndDelete({
+      _id: thoughtDeletion.id,
+    }).catch((err) => console.log(err));
+
+    if (successDeletion) {
+      let userThoughtDeleted = User.findOneAndUpdate(
+        {
+          _id: newThought.userId,
+        },
+        {
+          $pull: { thoughts: thoughtDeletion },
+        }
+      ).catch((err) => res.status(500).json(err));
+      if (userThoughtDeleted) {
+        return res.status(201).json(successDeletion);
+      } else {
+        return res.status(404).json({ err: "user could not be found" });
+      }
+    } else {
+      res
+        .status(500)
+        .json({ err: "Post request to create thought could not be completed" });
+    }
+  }
+};
 module.exports = {
   createThought,
   getAllThoughts,
