@@ -78,24 +78,23 @@ const updateThought = async (req, res) => {
 };
 
 const deleteThought = async (req, res) => {
-  let thoughtDeletion = req.params;
-
+  let thoughtDeletion = req.params.id;
   if (thoughtDeletion) {
     let successDeletion = await Thought.findOneAndDelete({
-      _id: thoughtDeletion.id,
+      _id: thoughtDeletion,
     }).catch((err) => console.log(err));
-
+    console.log(successDeletion);
     if (successDeletion) {
       let userThoughtDeleted = User.findOneAndUpdate(
         {
-          _id: newThought.userId,
+          _id: thoughtDeletion.userId,
         },
         {
           $pull: { thoughts: thoughtDeletion },
         }
       ).catch((err) => res.status(500).json(err));
       if (userThoughtDeleted) {
-        return res.status(201).json(successDeletion);
+        return res.status(200).json(successDeletion);
       } else {
         return res.status(404).json({ err: "user could not be found" });
       }
@@ -110,4 +109,6 @@ module.exports = {
   createThought,
   getAllThoughts,
   findSpecificThought,
+  updateThought,
+  deleteThought,
 };
