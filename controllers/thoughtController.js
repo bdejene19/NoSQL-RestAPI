@@ -33,9 +33,9 @@ const findSpecificThought = async (req, res) => {
   let thoughtId = req.params.id;
 
   if (thoughtId) {
-    let thoughtFound = await Thought.findById({ _id: thoughtId }).catch((err) =>
-      res.status(500).json(err)
-    );
+    let thoughtFound = await Thought.findById({ _id: thoughtId })
+      .populate("reactions")
+      .catch((err) => res.status(500).json(err));
 
     if (thoughtFound) {
       res.status(200).json(thoughtFound);
@@ -44,9 +44,9 @@ const findSpecificThought = async (req, res) => {
 };
 
 const getAllThoughts = async (req, res) => {
-  let allThoughts = await Thought.find({}).catch((err) =>
-    res.status(500).json(err)
-  );
+  let allThoughts = await Thought.find({})
+    .populate("reactions")
+    .catch((err) => res.status(500).json(err));
   if (allThoughts) {
     res.status(200).json(allThoughts);
   } else {

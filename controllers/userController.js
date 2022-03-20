@@ -17,7 +17,9 @@ const createUser = async (req, res) => {
 const getUserById = async (req, res) => {
   const user = await User.findOne({
     _id: req.params.id,
-  });
+  })
+    .populate("thoughts")
+    .catch((err) => res.status(500).json(err));
 
   if (user) {
     return res.status(200).json(user);
@@ -28,7 +30,7 @@ const getUserById = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({})
-    .populate()
+    .populate("thoughts")
     .catch((err) => res.status(500).json(err));
   if (!users) {
     return res

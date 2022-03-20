@@ -2,20 +2,20 @@ const { Reaction, Thought } = require("../models/index");
 
 const createReaction = async (req, res) => {
   let reactionBody = req.body;
-  console.log("b: ", reactionBody);
   let reactionAdded = await Reaction.create(reactionBody).catch((err) =>
     res.status(500).json(err)
   );
+
   if (reactionAdded) {
-    let reactionsParent = await Thought.findOneAndUpdate(
+    let reactionsParent = Thought.findOneAndUpdate(
       {
         _id: req.params.thoughtId,
       },
       {
         $addToSet: { reactions: reactionAdded },
       }
-    ).catch((err) => console.log(err));
-
+    ).catch((err) => res.status(500).json(err));
+    console.log("p: ", reactionsParent);
     if (reactionsParent) {
       return res.status(201).json(reactionAdded);
     }
@@ -38,9 +38,8 @@ const deleteReaction = async (req, res) => {
         new: true,
       }
     ).catch((err) => res.status(500).json(err));
-    console.log("deleted: ", deleted);
     if (deleted) {
-      let updatedThought = await Thought.findOneAndUpdate(
+      let updatedThought = Thought.findOneAndUpdate(
         {
           _id: thoughtId,
         },
