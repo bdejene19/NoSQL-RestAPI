@@ -1,4 +1,4 @@
-const { User, Reaction } = require("../models/index");
+const { User } = require("../models/index");
 
 const createUser = async (req, res) => {
   const newUser = await User.create({
@@ -17,7 +17,9 @@ const createUser = async (req, res) => {
 const getUserById = async (req, res) => {
   const user = await User.findOne({
     _id: req.params.id,
-  });
+  })
+    .populate("thoughts")
+    .catch((err) => res.status(500).json(err));
 
   if (user) {
     return res.status(200).json(user);
@@ -27,7 +29,9 @@ const getUserById = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find({}).catch((err) => res.status(500).json(err));
+  const users = await User.find({})
+    .populate("thoughts")
+    .catch((err) => res.status(500).json(err));
   if (!users) {
     return res
       .status(404)
@@ -78,6 +82,5 @@ module.exports = {
   getUserById,
   getAllUsers,
   updateUserById,
-
   deleteUser,
 };
