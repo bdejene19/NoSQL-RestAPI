@@ -18,6 +18,7 @@ thought
   .get(findSpecificThought)
   .put(updateThought)
   .delete(deleteThought);
-thought.route("/:id/reactions").post(createReaction).delete(deleteReaction);
 
+thought.route("/:thoughtId/reactions").post(createReaction);
+thought.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
 module.exports = thought;
