@@ -15,7 +15,7 @@ const createReaction = async (req, res) => {
         $addToSet: { reactions: reactionAdded },
       }
     ).catch((err) => res.status(500).json(err));
-    console.log("p: ", reactionsParent);
+
     if (reactionsParent) {
       return res.status(201).json(reactionAdded);
     }

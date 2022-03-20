@@ -3,7 +3,7 @@
 ## Table of Contents:
 
 - [Description](#description)</a>
-
+- [Video Walkthrough](#walkthrough)
 - [Installation Instructions](#installation-instructions)
 
 - [Usage Info](#usage-info)
@@ -17,6 +17,10 @@
 ## Description
 
 A backend application built using Express.js as to design the server and implement routing, and MongoDB as the database for memory persistence. The purpose of this application is demonstrate MongoDB capabilities, using multiple Schemas, CRUD functionality, and embedded documents and has been fully tested using Insomnia.
+
+## Walkthrough
+
+Link to [video walkthrough](https://drive.google.com/file/d/1nTvNPCWAA5cyRZUtDhDUKx5B2ZBovzRa/view?usp=sharing) of Insomnia testing and expected results.
 
 ## Installation Instructions
 
