@@ -75,41 +75,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// const addFriend = async (req, res) => {
-//   const userToAddFriend = await User.findOneAndUpdate(
-//     {
-//       _id: req.params.userid,
-//     },
-//     {
-//       $addToSet: { friends: req.body },
-//     }
-//   ).catch((err) => res.status(500).json(err));
-
-//   if (userToAddFriend) {
-//     return res.status(201).json(userToAddFriend);
-//   }
-//   return res
-//     .status(404)
-//     .json({ err: "user could not be found for friend post request" });
-// };
-
-// const deleteFriend = async (req, res) => {
-//   const userToDelete = await User.findOneAndUpdate(
-//     {
-//       _id: req.params.userId,
-//     },
-//     {
-//       $pullAll: { friends: req.params.friendId },
-//     }
-//   ).catch((err) => res.status(500).json(err));
-
-//   if (userToDelete) {
-//     return res.status(200).json(userToDelete);
-//   }
-//   return res
-//     .status(404)
-//     .json({ err: "Unable to find user for delete friend request." });
-// };
 module.exports = {
   createUser,
   getUserById,

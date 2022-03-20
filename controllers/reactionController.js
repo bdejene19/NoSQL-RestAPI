@@ -7,16 +7,15 @@ const createReaction = async (req, res) => {
     res.status(500).json(err)
   );
   if (reactionAdded) {
-    console.log("new reaction: ", reactionAdded);
     let reactionsParent = await Thought.findOneAndUpdate(
       {
-        _id: reactionAdded.reactionId,
+        _id: req.params.thoughtId,
       },
       {
         $addToSet: { reactions: reactionAdded },
       }
     ).catch((err) => console.log(err));
-    console.log("my updated thought:", reactionsParent);
+
     if (reactionsParent) {
       return res.status(201).json(reactionAdded);
     }
@@ -26,35 +25,44 @@ const createReaction = async (req, res) => {
 };
 
 const deleteReaction = async (req, res) => {
-  let thoughtId = req.params.thoughtId;
-  let deleteReactionId = req.params.reactionId;
-  if (deleteReactionId) {
-    let deletedReaction = await Reaction.findOneAndDelete(
+  const thoughtId = req.params.thoughtId;
+  const reactionId = req.params.reactionId;
+  console.log("tid: ", thoughtId);
+  console.log("rid", reactionId);
+  if (reactionId) {
+    let deleted = await Reaction.findOneAndDelete(
       {
-        _id: deleteReactionId,
+        _id: reactionId,
       },
       {
         new: true,
       }
     ).catch((err) => res.status(500).json(err));
-
-    if (deletedReaction) {
+    console.log("deleted: ", deleted);
+    if (deleted) {
       let updatedThought = await Thought.findOneAndUpdate(
         {
           _id: thoughtId,
         },
         {
-          $pull: { reactions: { reactionAdded: req.params.reactionId } },
+          $pull: { reactions: reactionId },
+        },
+        {
+          new: true,
         }
       ).catch((err) => console.log(err));
       if (updatedThought) {
-        return res.status(200).json({ deletedReaction });
+        return res.status(200).json({ deleted });
       }
     } else {
       return res
         .status(404)
         .json({ err: "Delete request on reaction could not be made" });
     }
+  } else {
+    return res
+      .status(404)
+      .json({ err: "reaction delete request could not be made" });
   }
 };
 
